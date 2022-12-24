@@ -24,7 +24,7 @@
 - response
     ```json
     {
-        "code": "201",
+        "code": 201,
 	    "status": "Success",
 	    "message" : "Note Baru Berhasil Ditambahkan",
     }
