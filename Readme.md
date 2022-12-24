@@ -29,3 +29,26 @@
 	    "message" : "Note Baru Berhasil Ditambahkan",
     }
     ```
+## List Note
+- URL : `localhost:8080/api/v1/notes`
+- Method: `POST`
+- response
+    ```json
+    {
+        "code": 200,
+	    "status": "Success",
+	    "message" : "Success get list notes",
+        "data" : [
+            {
+                "id": 1,
+                "title": "golang",
+                "body": "bahasa golang dari google"
+            },
+            {
+                "id": 2,
+                "title": "js",
+                "body": "javascript beda dari java"
+            }
+        ]
+    }
+    ```
