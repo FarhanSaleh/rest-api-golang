@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -81,6 +82,47 @@ func main() {
 			write(w, http.StatusOK, "Success get list notes", "Success", notes)
 			return
 		}
+
+		if r.Method == http.MethodPut {
+			pID := r.URL.Query().Get("id")
+			id, err := strconv.Atoi(pID)
+			if err != nil {
+				fmt.Println("Error :", err)
+				write(w, http.StatusBadRequest, "salah parameter", "error", nil)
+				return
+			}
+
+			rBody, err := io.ReadAll(r.Body)
+			if err != nil {
+				fmt.Println("Error :", err)
+				write(w, http.StatusInternalServerError, "SIstem Sedang sibuk", "error", nil)
+				return
+			}
+			var note Note
+			err = json.Unmarshal(rBody, &note)
+			if err != nil {
+				fmt.Println("error :", err)
+				write(w, http.StatusInternalServerError, "SIstem Sedang sibuk", "error", nil)
+				return
+			}
+
+			if note.Title == "" || note.Body == "" {
+				fmt.Println("error :", "title/body is null")
+				write(w, http.StatusBadRequest, "Salah Input", "error", nil)
+				return
+			}
+
+			for i, oldNote := range notes {
+				if oldNote.ID == id {
+					notes[i].Title = note.Title
+					notes[i].Body = note.Body
+				}
+			}
+
+			write(w, http.StatusCreated, "Note Baru Berhasil Ditambahkan", "Success", nil)
+			return
+		}
+
 		write(w, http.StatusMethodNotAllowed, "Method Not Allowed", "error", nil)
 	})
 
